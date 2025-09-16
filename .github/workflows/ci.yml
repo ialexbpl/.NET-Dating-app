@@ -1,0 +1,50 @@
+﻿name: CI
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main", "feature/**", "bugfix/**" ]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:              # Keep default token as restricted as we can
+    contents: read
+
+jobs:
+  backend:
+    name: Backend (.NET 9.0.101)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: DatingApp/Backend/API
+    steps:
+      # --- Get the code
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # --- Install the exact SDK you use locally
+      - name: Setup .NET 9.0.101
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.101'
+  # --- Speed up restores across runs
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.sln', '**/*.csproj', '**/packages.lock.json') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+    # --- Restore & build the API project (Release)
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build (Release)
+        run: dotnet build -c Release --no-restore
+      - name: Test (Release)
+        # If you have test projects, this will run them.
+        # If your tests live outside API/, set working-directory: . and pass the solution or test csproj path.
+        run: dotnet test -c Release --no-build --verbosity normal

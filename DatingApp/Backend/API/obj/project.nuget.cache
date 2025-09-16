@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "MSI3zv1GCiM=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\spart\\source\\repos\\.NET Dating app\\DatingApp\\API\\API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\spart\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.0\\microsoft.aspnetcore.openapi.9.0.0.nupkg.sha512",
+    "C:\\Users\\spart\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}
